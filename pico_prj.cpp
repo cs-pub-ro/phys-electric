@@ -13,13 +13,13 @@ char dst[count_of(src)];
 
 // UART defines
 // By default the stdout UART is `uart0`, so we will use the second one
-#define UART_ID uart1
-#define BAUD_RATE 115200
+#define UART_ID uart0
+#define BAUD_RATE 9600
 
 // Use pins 4 and 5 for UART1
 // Pins can be changed, see the GPIO function select table in the datasheet for information on GPIO assignments
-#define UART_TX_PIN 4
-#define UART_RX_PIN 5
+#define UART_TX_PIN 12
+#define UART_RX_PIN 13
 
 
 
@@ -85,8 +85,18 @@ int main()
     
     // For more examples of UART use see https://github.com/raspberrypi/pico-examples/tree/master/uart
 
+    //printf("Hello, world!\n");
+
     while (true) {
         printf("Hello, world!\n");
-        sleep_ms(1000);
+
+        // Read a character from UART and echo it back
+        if (uart_is_readable(UART_ID)) {
+            char ch = uart_getc(UART_ID);
+            //uart_putc(UART_ID, ch);
+            printf("%c", ch);
+        }
+
+        //sleep_ms(1000);
     }
 }
