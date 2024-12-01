@@ -191,3 +191,6 @@ C:/Users/rober/Desktop/PICO_prj/phys-electric/build/pico-sdk/src/rp2_common/pico
 C:/Users/rober/Desktop/PICO_prj/phys-electric/build/pico-sdk/src/rp2_common/pico_stdlib/CMakeFiles/rebuild_cache.dir
 C:/Users/rober/Desktop/PICO_prj/phys-electric/build/pico-sdk/docs/CMakeFiles/edit_cache.dir
 C:/Users/rober/Desktop/PICO_prj/phys-electric/build/pico-sdk/docs/CMakeFiles/rebuild_cache.dir
+C:/Users/rober/Desktop/PICO_prj/phys-electric/build/manchester_codec/CMakeFiles/manchester_codec.dir
+C:/Users/rober/Desktop/PICO_prj/phys-electric/build/manchester_codec/CMakeFiles/edit_cache.dir
+C:/Users/rober/Desktop/PICO_prj/phys-electric/build/manchester_codec/CMakeFiles/rebuild_cache.dir
