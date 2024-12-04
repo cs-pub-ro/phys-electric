@@ -22,18 +22,38 @@
 
 using namespace std;
 
+void on_uart_rx() {
+    // Read all available data from UART
+    while (uart_is_readable(UART_ID)) {
+        // Read the data from UART
+        char ch = uart_getc(UART_ID);
+        // Send the data to the serial connection
+        printf("%c", ch);
+    }
+}
+
+// Set up the UART interrupt handler
+void setup_uart_irq() {
+    // Set up a handler for UART receive interrupts
+    irq_set_exclusive_handler(UART0_IRQ, on_uart_rx);
+    // Enable the UART interrupt
+    irq_set_enabled(UART0_IRQ, true);
+    // Enable the UART to generate interrupts when data is received
+    uart_set_irq_enables(UART_ID, true, false);
+}
+
 int main()
 {
     string type;
     cin >> type;
 
     stdio_init_all();
-
+    
     // Initialise the Wi-Fi chip
-    if (cyw43_arch_init()) {
-        printf("Wi-Fi init failed\n");
-        return -1;
-    }
+    // if (cyw43_arch_init()) {
+    //     printf("Wi-Fi init failed\n");
+    //     return -1;
+    // }
 
  
     // Set up our UART
@@ -42,40 +62,24 @@ int main()
     // Set datasheet for more information on function select
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+    // Set the UART flow control CTS/RTS pins
+    uart_set_hw_flow(UART_ID, true, true);
+    // Set up the UART interrupt
+    setup_uart_irq();
+    // Create a thread to handle serial input
 
-    // // Read a     character from UART and echo it back
-    // if (uart_is_readable(UART_ID)) {
-    //     char ch = uart_getc(UART_ID);
-    //     //uart_putc(UART_ID, ch);
-    //     printf("%c", ch);
-    // }
-
-    if (type == "sender") {
-        Sender sender;
-        sender.init(UART_TX_PIN, BAUD_RATE, CLOCK_PERIOD_US, UART_ID);
-        
-        while (true) {
-            sender.send_manchester_byte('A');
-            sleep_ms(1000);
-        }
-        
-    } else if (type == "receiver") {
-        Receiver receiver;
-        receiver.init(UART_RX_PIN, BAUD_RATE, CLOCK_PERIOD_US, UART_ID);
-        
-        while (true) {
-    
-            int received_byte = receiver.receive_manchester_byte();
-            if (received_byte != -1) {
-                printf("Received byte: 0x%02X\n", received_byte);
-            } else {
-                printf("Error: Invalid Manchester encoding\n");
+    // Detach the thread to run independently
+    while (true) {
+        if (tud_cdc_connected()) {
+            if (tud_cdc_available()) {
+                char buf[64];
+                uint32_t count = tud_cdc_read(buf, sizeof(buf));
+                for (uint32_t i = 0; i < count; i++) {
+                    uart_putc(UART_ID, buf[i]);
+                }
             }
-            sleep_ms(1000);
         }
-
-    } else {
-        printf("Invalid type. Choose between \"sender\" and \"receiver\" \n");
-        return -1;
+        sleep_us(10);
     }
 }
+
