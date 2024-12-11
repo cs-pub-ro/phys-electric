@@ -51,6 +51,8 @@ pico_sdk_init()
 
 add_subdirectory(manchester_codec)
 
+add_subdirectory(framing)
+
 add_executable(pico_prj pico_prj.cpp )
 
 pico_set_program_name(pico_prj "pico_prj")
@@ -66,6 +68,9 @@ target_link_libraries(pico_prj
 
 target_link_libraries(pico_prj
         manchester_codec)
+
+target_link_libraries(pico_prj
+        framing)
 
 # Add the standard include files to the build
 target_include_directories(pico_prj PRIVATE

@@ -194,3 +194,6 @@ C:/Users/rober/Desktop/PICO_prj/phys-electric/build/pico-sdk/docs/CMakeFiles/reb
 C:/Users/rober/Desktop/PICO_prj/phys-electric/build/manchester_codec/CMakeFiles/manchester_codec.dir
 C:/Users/rober/Desktop/PICO_prj/phys-electric/build/manchester_codec/CMakeFiles/edit_cache.dir
 C:/Users/rober/Desktop/PICO_prj/phys-electric/build/manchester_codec/CMakeFiles/rebuild_cache.dir
+C:/Users/rober/Desktop/PICO_prj/phys-electric/build/framing/CMakeFiles/framing.dir
+C:/Users/rober/Desktop/PICO_prj/phys-electric/build/framing/CMakeFiles/edit_cache.dir
+C:/Users/rober/Desktop/PICO_prj/phys-electric/build/framing/CMakeFiles/rebuild_cache.dir
