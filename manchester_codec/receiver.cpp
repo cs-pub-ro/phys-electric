@@ -1,11 +1,10 @@
 #include "receiver.h"
 
-void Receiver::init(uint8_t rx_pin, uint32_t baud_rate, uint32_t clock_period_us, uart_inst_t *uart_instance)
+void Receiver::init(uint8_t rx_pin, uint32_t baud_rate, uint32_t clock_period_us)
 {
     this->rx_pin = rx_pin;
     this->baud_rate = baud_rate;
     this->clock_period_us = clock_period_us;
-    this->uart_instance = uart_instance;
 }
 
 int Receiver::receive_manchester_bit(int first_half, int second_half) {
@@ -21,20 +20,22 @@ int Receiver::receive_manchester_byte()
 {
     int byte = 0;
     for (int i = 0; i < 8; i++) {
-        if (uart_is_readable(this->uart_instance)) {
+        // Read the first half of the Manchester bit
+        int first_half = gpio_get(this->rx_pin);
+        busy_wait_us(this->clock_period_us / 2); // Wait for half the clock period
 
-            int first_half = uart_getc(this->uart_instance);
-            busy_wait_us(this->clock_period_us / 2);
+        // Read the second half of the Manchester bit
+        int second_half = gpio_get(this->rx_pin);
+        busy_wait_us(this->clock_period_us / 2); // Wait for the remaining half of the clock period
 
-            int second_half = uart_getc(this->uart_instance);
-            busy_wait_us(this->clock_period_us / 2);
-
-            int bit = Receiver::receive_manchester_bit(first_half, second_half);
-            if (bit == -1) {
-                return -1;
-            }
-            byte = (byte << 1) | bit;
+        // Decode the Manchester bit
+        int bit = Receiver::receive_manchester_bit(first_half, second_half);
+        if (bit == -1) {
+            return -1; // Return error for invalid Manchester encoding
         }
+
+        // Shift the bit into the byte
+        byte = (byte << 1) | bit;
     }
     return byte;
 }
