@@ -19,7 +19,7 @@ int Receiver::receive_manchester_bit(int first_half, int second_half) {
 int Receiver::receive_manchester_byte()
 {
     int byte = 0;
-    for (int i = 0; i < 8; i++) {
+    for (int i = 7; i >= 0; i--) {
         // Read the first half of the Manchester bit
         int first_half = gpio_get(this->rx_pin);
         busy_wait_us(this->clock_period_us / 2); // Wait for half the clock period

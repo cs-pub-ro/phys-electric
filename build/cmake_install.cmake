@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/rober/Desktop/PICO_prj/phys-electric
+# Install script for directory: C:/Users/rober/Desktop/PICO_prj/real_branch/phys-electric
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,9 +39,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/rober/Desktop/PICO_prj/phys-electric/build/pico-sdk/cmake_install.cmake")
-  include("C:/Users/rober/Desktop/PICO_prj/phys-electric/build/manchester_codec/cmake_install.cmake")
-  include("C:/Users/rober/Desktop/PICO_prj/phys-electric/build/framing/cmake_install.cmake")
+  include("C:/Users/rober/Desktop/PICO_prj/real_branch/phys-electric/build/pico-sdk/cmake_install.cmake")
+  include("C:/Users/rober/Desktop/PICO_prj/real_branch/phys-electric/build/manchester_codec/cmake_install.cmake")
+  include("C:/Users/rober/Desktop/PICO_prj/real_branch/phys-electric/build/framing/cmake_install.cmake")
+  include("C:/Users/rober/Desktop/PICO_prj/real_branch/phys-electric/build/ethernet/cmake_install.cmake")
 
 endif()
 
@@ -53,5 +54,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/rober/Desktop/PICO_prj/phys-electric/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/rober/Desktop/PICO_prj/real_branch/phys-electric/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

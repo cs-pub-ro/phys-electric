@@ -6,24 +6,26 @@
 #include "hardware/uart.h"
 #include "tusb.h"
 #include "framing/framing.h"
+#include "ethernet/ethernet.hpp"
 #include <string>
 #include <iostream>
 
 // UART defines
-// By default the stdout UART is `uart0`, so we will use the second one
 #define BAUD_RATE 9600
-
 #define TX_PIN 12
 #define RX_PIN 13
+#define CLOCK_PERIOD_US 104
 
-#define CLOCK_PERIOD_US 100
+const uint8_t source_mac_address[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xCA, 0xFE};
+const uint8_t destination_mac_address[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xCA, 0xFE};
+const uint16_t ether_type = 0x0800;
 
 using namespace std;
 
 int main()
 {
-    string type;
-    type = "sender";
+    // Change this to "sender" or "receiver" before flashing
+    string type = "receiver";
 
     stdio_init_all();
 
@@ -41,39 +43,48 @@ int main()
     gpio_init(RX_PIN);
     gpio_set_dir(RX_PIN, GPIO_IN);
 
- 
-    // // Set up our UART
-    // uart_init(UART_ID, BAUD_RATE);
-
-    // Set the TX and RX pins by using the function select on the GPIO
-    // Set datasheet for more information on function select
-    //gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
-    //gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
-
-    // // Read a     character from UART and echo it back
-    // if (uart_is_readable(UART_ID)) {
-    //     char ch = uart_getc(UART_ID);
-    //     //uart_putc(UART_ID, ch);
-    //     printf("%c", ch);
-    // }
+    // Power on the Wi-Fi LED
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
 
     if (type == "sender") {
         Sender sender;
         sender.init(TX_PIN, BAUD_RATE, CLOCK_PERIOD_US);
 
-        // Send a frame
-        uint8_t data[] = {0x01, 0x02, 0x03, 0x04};
-        Framing framing;
-        framing.send_frame(sender, data, sizeof(data));
-        
+        // Example payload
+        uint8_t data[] = {'A', 'A', 'C', 'C'};
+        Ethernet ethernet;
+        ethernet.init(source_mac_address, destination_mac_address, ether_type);
+
+        while(1) {
+            printf("Sent frame: \n");
+            ethernet.send_ethernet(sender, data, sizeof(data));
+            sleep_ms(1000);
+        }
+
     } else if (type == "receiver") {
         Receiver receiver;
         receiver.init(RX_PIN, BAUD_RATE, CLOCK_PERIOD_US);
 
-        // Receive a frame
-        uint8_t buffer[4];
-        Framing framing;
-        framing.receive_frame(receiver, buffer, sizeof(buffer));
+        Ethernet ethernet;
+        ethernet.init(source_mac_address, destination_mac_address, ether_type);
+
+        // Expecting the same byte payload as the sender
+        uint8_t buffer[4] = {0};
+
+        while(1) {
+            printf("Waiting to receive frame...\n");
+            
+            // clear buffer
+            memset(buffer, 0, sizeof(buffer));
+
+            ethernet.receive_ethernet(receiver, buffer, sizeof(buffer));
+
+            printf("Received frame: ");
+            for (size_t i = 0; i < sizeof(buffer); ++i) {
+                printf("%2X ", buffer[i]);
+            }
+            printf("\n");
+        }
 
     } else {
         printf("Invalid type. Choose between \"sender\" and \"receiver\" \n");

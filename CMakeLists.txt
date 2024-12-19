@@ -4,6 +4,20 @@ if(WIN32)
 else()
     set(USERHOME $ENV{HOME})
 endif()
+set(sdkVersion 2.1.0)
+set(toolchainVersion 13_3_Rel1)
+set(picotoolVersion 2.1.0)
+set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+if (EXISTS ${picoVscode})
+    include(${picoVscode})
+endif()
+# ====================================================================================
+# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
+if(WIN32)
+    set(USERHOME $ENV{USERPROFILE})
+else()
+    set(USERHOME $ENV{HOME})
+endif()
 set(sdkVersion 2.0.0)
 set(toolchainVersion 13_2_Rel1)
 set(picotoolVersion 2.0.0)
@@ -53,6 +67,8 @@ add_subdirectory(manchester_codec)
 
 add_subdirectory(framing)
 
+add_subdirectory(ethernet)
+
 add_executable(pico_prj pico_prj.cpp )
 
 pico_set_program_name(pico_prj "pico_prj")
@@ -71,6 +87,9 @@ target_link_libraries(pico_prj
 
 target_link_libraries(pico_prj
         framing)
+
+target_link_libraries(pico_prj
+        ethernet)
 
 # Add the standard include files to the build
 target_include_directories(pico_prj PRIVATE
