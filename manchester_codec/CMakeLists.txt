@@ -5,8 +5,7 @@ include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
 # Create the library
 add_library(manchester_codec
-    sender.cpp
-    receiver.cpp
+    manchester.cpp
 )
 
 # Add include directories
