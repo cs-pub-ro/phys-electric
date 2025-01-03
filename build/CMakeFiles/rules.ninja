@@ -123,47 +123,6 @@ rule CXX_STATIC_LIBRARY_LINKER__manchester_codec_Release
 #############################################
 # Rule for compiling ASM files.
 
-rule ASM_COMPILER__framing_unscanned_Release
-  depfile = $DEP_FILE
-  deps = gcc
-  command = ${LAUNCHER}${CODE_CHECK}C:\Users\rober\.pico-sdk\toolchain\13_2_Rel1\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
-  description = Building ASM object $out
-
-
-#############################################
-# Rule for compiling C files.
-
-rule C_COMPILER__framing_unscanned_Release
-  depfile = $DEP_FILE
-  deps = gcc
-  command = ${LAUNCHER}${CODE_CHECK}C:\Users\rober\.pico-sdk\toolchain\13_2_Rel1\bin\arm-none-eabi-gcc.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
-  description = Building C object $out
-
-
-#############################################
-# Rule for compiling CXX files.
-
-rule CXX_COMPILER__framing_unscanned_Release
-  depfile = $DEP_FILE
-  deps = gcc
-  command = ${LAUNCHER}${CODE_CHECK}C:\Users\rober\.pico-sdk\toolchain\13_2_Rel1\bin\arm-none-eabi-g++.exe $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
-  description = Building CXX object $out
-
-
-#############################################
-# Rule for linking CXX static library.
-
-rule CXX_STATIC_LIBRARY_LINKER__framing_Release
-  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && C:\Users\rober\.pico-sdk\cmake\v3.29.9\bin\cmake.exe -E rm -f $TARGET_FILE && C:\Users\rober\.pico-sdk\toolchain\13_2_Rel1\bin\arm-none-eabi-ar.exe qc $TARGET_FILE $LINK_FLAGS @$RSP_FILE && C:\Users\rober\.pico-sdk\toolchain\13_2_Rel1\bin\arm-none-eabi-ranlib.exe $TARGET_FILE && $POST_BUILD"
-  description = Linking CXX static library $TARGET_FILE
-  rspfile = $RSP_FILE
-  rspfile_content = $in $LINK_PATH $LINK_LIBRARIES
-  restat = $RESTAT
-
-
-#############################################
-# Rule for compiling ASM files.
-
 rule ASM_COMPILER__ethernet_unscanned_Release
   depfile = $DEP_FILE
   deps = gcc
@@ -206,7 +165,7 @@ rule CXX_STATIC_LIBRARY_LINKER__ethernet_Release
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\Users\rober\.pico-sdk\cmake\v3.29.9\bin\cmake.exe --regenerate-during-build -SC:\Users\rober\Desktop\PICO_prj\real_branch\phys-electric -BC:\Users\rober\Desktop\PICO_prj\real_branch\phys-electric\build
+  command = C:\Users\rober\.pico-sdk\cmake\v3.29.9\bin\cmake.exe --regenerate-during-build -SC:\Users\rober\Desktop\PICO_prj\refresh\phys-electric -BC:\Users\rober\Desktop\PICO_prj\refresh\phys-electric\build
   description = Re-running CMake...
   generator = 1
 
